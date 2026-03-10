@@ -3,7 +3,7 @@ import requests
 def fetch_data():
     try:
         results = []
-        response = requests.get("https://api.thecatapi.com/v1/images/search")
+        response = requests.get("https://api.thecatapi.com/v1/images/search?limit=10")
         if response.status_code == 200:
             results = response.json()
         else:
