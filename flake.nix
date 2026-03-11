@@ -16,9 +16,6 @@
         packages = with pkgs; [
           nodejs_24
           pnpm
-          python3
-          python3Packages.SQLalchemy
-          python3Packages.requests
         ];
       };
     });
