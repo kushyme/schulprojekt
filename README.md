@@ -33,7 +33,9 @@ Schulprojekt/
 │   └── test_db.py          # Tests für die Datenbank
 │
 ├── docs/
-│   └── er_modell.html      # ER-Diagramm der Datenbankstruktur
+│   └── ER Modell.drawio.pdf     # ER-Diagramm der Datenbankstruktur
+│   └── SchulprojektAPI.pdf      # Präsentation als pdf
+│   └── SchulprojektAPI.pptx     # Präsentation als pptx 
 │
 ├── main.py                 # Einstiegspunkt / CLI-Menü
 └── README.md
