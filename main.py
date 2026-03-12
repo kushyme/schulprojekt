@@ -116,11 +116,15 @@ def show_game_by_id():
     print_header("SPIEL DETAIL - ID " + game_id)
     result = fetch_game_by_id(game_id)
 
-    info = result["info"]
-    deals = result["deals"]
+    if result is None:
+        print("  Kein Spiel gefunden.")
+        return
 
-    cheapest = info["cheapest"]
-    steam_id = info["steamAppID"]
+    info = result.get("info", {})
+    deals = result.get("deals", [])
+
+    cheapest = info.get("cheapest", "n/a")
+    steam_id = info.get("steamAppID", "n/a")
 
     print("  Guenstigster Preis: $" + str(cheapest))
     print("  Steam App ID: " + str(steam_id))
@@ -128,9 +132,9 @@ def show_game_by_id():
     print("  Deals:")
 
     for d in deals:
-        store_id = d["storeID"]
-        price = d["price"]
-        rating = d["dealRating"]
+        store_id = d.get("storeID", "n/a")
+        price = d.get("price", "n/a")
+        rating = d.get("dealRating", "n/a")
         print("    Store " + str(store_id) + " - $" + str(price) + " (Rating: " + str(rating) + ")")
 
 def create_alert():
