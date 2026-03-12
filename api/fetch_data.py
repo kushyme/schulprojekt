@@ -16,13 +16,14 @@ def fetch_all_deals(page_size):
 
 def fetch_deal_by_id(deal_id):
     try:
-        results = []
-        response = requests.get(f"{BASE_URL}/deals",params={"id":deal_id})
+        result = []
+        url = f"{BASE_URL}/deals?id={deal_id}"
+        response = requests.get(url)
         if response.status_code == 200:
-            results = response.json()
+            result = response.json()
         else:
-            print(f"error fetching data: {response.status_code}")
-        return results
+            print(f"Error fetching deal {deal_id}: {response.status_code}")
+        return result
     except requests.RequestException as e:
         raise RuntimeError(f"Network error: {e}")
 
@@ -37,7 +38,6 @@ def fetch_games_by_title(title):
         return results
     except requests.RequestException as e:
         raise RuntimeError(f"Network error: {e}")
- 
  
 def fetch_game_by_id(game_id):
     try:
