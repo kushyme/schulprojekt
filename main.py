@@ -7,6 +7,7 @@ from api.fetch_data import (
     set_price_alert,
     delete_price_alert,
 )
+from db.insert_data import insert_stores, insert_deals, insert_games
 
 def print_header(title):
     print("\n" + "=" * 45)
@@ -28,6 +29,7 @@ def print_menu():
 def show_stores():
     print_header("STORES")
     stores = fetch_all_stores()
+    insert_stores(stores)
 
     for store in stores:
         store_id = store["storeID"]
@@ -47,6 +49,7 @@ def show_deals():
 
     print_header("DEALS")
     deals = fetch_all_deals(page_size=anzahl)
+    insert_deals(deals)
 
     for deal in deals:
         title = deal["title"]
@@ -68,25 +71,29 @@ def show_deal_by_id():
     print_header("DEAL DETAIL")
     detail = fetch_deal_by_id(deal_id)
 
-    game_info = detail["gameInfo"]
-    cheapest = detail["cheapestPriceEver"]
+    if detail is None or len(detail) == 0:
+        print("  Kein Deal gefunden.")
+        return
 
-    name = game_info["name"]
-    store_id = game_info["storeID"]
-    sale_price = game_info["salePrice"]
-    retail_price = game_info["retailPrice"]
-    metacritic = game_info["metacriticScore"]
-    steam_rating = game_info["steamRatingText"]
-    steam_percent = game_info["steamRatingPercent"]
-    cheapest_price = cheapest["price"]
-    cheapest_date = cheapest["date"]
+    game_info = detail.get("gameInfo", {})
+    cheapest = detail.get("cheapestPriceEver", {})
 
-    print("  Titel: " + name)
-    print("  Store-ID: " + store_id)
-    print("  Aktueller Preis: $" + sale_price)
-    print("  Normalpreis: $" + retail_price)
+    name = game_info.get("name", "n/a")
+    store_id = game_info.get("storeID", "n/a")
+    sale_price = game_info.get("salePrice", "n/a")
+    retail_price = game_info.get("retailPrice", "n/a")
+    metacritic = game_info.get("metacriticScore", "n/a")
+    steam_rating = game_info.get("steamRatingText", "n/a")
+    steam_percent = game_info.get("steamRatingPercent", "n/a")
+    cheapest_price = cheapest.get("price", "n/a")
+    cheapest_date = cheapest.get("date", "n/a")
+
+    print("  Titel: " + str(name))
+    print("  Store-ID: " + str(store_id))
+    print("  Aktueller Preis: $" + str(sale_price))
+    print("  Normalpreis: $" + str(retail_price))
     print("  Metacritic: " + str(metacritic))
-    print("  Steam-Rating: " + steam_rating + " (" + str(steam_percent) + "%)")
+    print("  Steam-Rating: " + str(steam_rating) + " (" + str(steam_percent) + "%)")
     print("  Guenstigster Preis je: $" + str(cheapest_price) + " am " + str(cheapest_date))
 
 def search_games_by_title():
@@ -94,6 +101,7 @@ def search_games_by_title():
 
     print_header("SPIELSUCHE - " + title)
     games = fetch_games_by_title(title)
+    insert_games(games)
 
     for game in games:
         game_id = game["gameID"]
