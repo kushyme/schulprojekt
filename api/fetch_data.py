@@ -38,7 +38,6 @@ def fetch_games_by_title(title):
         return results
     except requests.RequestException as e:
         raise RuntimeError(f"Network error: {e}")
- 
 def fetch_game_by_id(game_id):
     try:
         result = None
