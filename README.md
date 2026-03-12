@@ -36,7 +36,6 @@ Schulprojekt/
 │   └── er_modell.html      # ER-Diagramm der Datenbankstruktur
 │
 ├── main.py                 # Einstiegspunkt / CLI-Menü
-├── requirements.txt        # Abhängigkeiten
 └── README.md
 ```
  
