@@ -2,10 +2,10 @@ import requests
 
 BASE_URL = "https://www.cheapshark.com/api/1.0"
 
-def fetch_all_deals(page_size, page_number):
+def fetch_all_deals(page_size):
     try:
         results = []
-        response = requests.get(f"{BASE_URL}/deals?", params={"pageSize": page_size, "pageNumber": page_number,})
+        response = requests.get(f"{BASE_URL}/deals?", params={"pageSize": page_size,})
         if response.status_code == 200:
             results = response.json()
         else:
