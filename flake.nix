@@ -21,7 +21,7 @@
     in {
       devShells.default = pkgs.mkShell {
         packages = with pkgs; [
-          mongodb
+          mongosh
           (python3.withPackages (python-pkgs:
             with python-pkgs; [
               requests
