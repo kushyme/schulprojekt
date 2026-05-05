@@ -26,6 +26,7 @@
             with python-pkgs; [
               requests
               pymongo
+              datetime
             ]))
         ];
 
