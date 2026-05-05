@@ -1,0 +1,70 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36" version="29.6.3">
+  <diagram name="Page-1" id="mFDKPT2qSSqJ5isjBgX3">
+    <mxGraphModel dx="1332" dy="553" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="vaF9Yb1UWGK1Fa2D_7ik-1" parent="1" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://icons.diagrams.net/icon-cache1/Unicons_Line_vol_3-2965/docker-1335.svg" value="" vertex="1">
+          <mxGeometry height="64" width="64" x="87" y="40.75" as="geometry" />
+        </mxCell>
+        <mxCell id="vaF9Yb1UWGK1Fa2D_7ik-8" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="docker-compose.yml" vertex="1">
+          <mxGeometry height="30" width="60" x="89" y="104.75" as="geometry" />
+        </mxCell>
+        <mxCell id="vaF9Yb1UWGK1Fa2D_7ik-9" parent="1" style="dashed=0;outlineConnect=0;html=1;align=center;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;shape=mxgraph.weblogos.mongodb" value="" vertex="1">
+          <mxGeometry height="66.2" width="30" x="370" y="248" as="geometry" />
+        </mxCell>
+        <mxCell id="vaF9Yb1UWGK1Fa2D_7ik-10" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="MongoDB Container" vertex="1">
+          <mxGeometry height="30" width="60" x="355" y="317.2" as="geometry" />
+        </mxCell>
+        <mxCell id="vaF9Yb1UWGK1Fa2D_7ik-11" parent="1" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.website_generic;pointerEvents=1;" value="" vertex="1">
+          <mxGeometry height="52.5" width="70" x="224" y="46.5" as="geometry" />
+        </mxCell>
+        <mxCell id="vaF9Yb1UWGK1Fa2D_7ik-12" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="MongoDB Express" vertex="1">
+          <mxGeometry height="30" width="60" x="224" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="vaF9Yb1UWGK1Fa2D_7ik-14" edge="1" parent="1" source="vaF9Yb1UWGK1Fa2D_7ik-1" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" target="vaF9Yb1UWGK1Fa2D_7ik-11" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="340" y="230" as="sourcePoint" />
+            <mxPoint x="390" y="180" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vaF9Yb1UWGK1Fa2D_7ik-16" edge="1" parent="1" source="vaF9Yb1UWGK1Fa2D_7ik-1" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="vaF9Yb1UWGK1Fa2D_7ik-9" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="340" y="230" as="sourcePoint" />
+            <mxPoint x="390" y="180" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vaF9Yb1UWGK1Fa2D_7ik-17" parent="1" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://icons.diagrams.net/icon-cache1/Ionicons_Fill_Vol_2-2187/logo-python-593.svg" value="" vertex="1">
+          <mxGeometry height="62" width="62" x="79" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="vaF9Yb1UWGK1Fa2D_7ik-18" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="cli-interface.py" vertex="1">
+          <mxGeometry height="30" width="60" x="81" y="312" as="geometry" />
+        </mxCell>
+        <mxCell id="vaF9Yb1UWGK1Fa2D_7ik-19" parent="1" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://icons.diagrams.net/icon-cache1/Ionicons_Fill_Vol_2-2187/logo-python-593.svg" value="" vertex="1">
+          <mxGeometry height="62" width="62" x="222" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="vaF9Yb1UWGK1Fa2D_7ik-20" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="api.py" vertex="1">
+          <mxGeometry height="30" width="60" x="222" y="312" as="geometry" />
+        </mxCell>
+        <mxCell id="vaF9Yb1UWGK1Fa2D_7ik-21" edge="1" parent="1" source="vaF9Yb1UWGK1Fa2D_7ik-17" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="vaF9Yb1UWGK1Fa2D_7ik-19" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="340" y="220" as="sourcePoint" />
+            <mxPoint x="390" y="170" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vaF9Yb1UWGK1Fa2D_7ik-23" edge="1" parent="1" source="vaF9Yb1UWGK1Fa2D_7ik-19" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="vaF9Yb1UWGK1Fa2D_7ik-9" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="340" y="220" as="sourcePoint" />
+            <mxPoint x="390" y="170" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vaF9Yb1UWGK1Fa2D_7ik-24" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="First Step:" vertex="1">
+          <mxGeometry height="30" width="60" x="19" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="vaF9Yb1UWGK1Fa2D_7ik-25" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Second Step:" vertex="1">
+          <mxGeometry height="30" width="60" x="10" y="230" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
