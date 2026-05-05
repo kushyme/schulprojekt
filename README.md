@@ -56,3 +56,6 @@ This provides Python with the required packages and `mongosh`.
 
 ## Project Architecture
 ![image](docs/project-architecture.png)
+
+## AI Usage Documentation
+- [AI Documentation](docs/ai-documentation.md)
