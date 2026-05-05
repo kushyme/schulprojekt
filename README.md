@@ -1,4 +1,4 @@
-## Getting started
+## Getting Started
 ## 1. Starting up the docker compose containers
 - bash: ```docker compose up -d``` -> starts the MongoDB Container & MongoDB Express (WebUI)
 
@@ -52,3 +52,7 @@ nix develop
 ```
 
 This provides Python with the required packages and `mongosh`.
+
+
+## Project Architecture
+![image](docs/project-architecture.png)
