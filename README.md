@@ -5,12 +5,6 @@
 - MongoDB on ```localhost:27017```
 - MongoDB Express Web UI on ```http://localhost:8081```
 
-- MongoDB credentials are defined in docker-compose.yml:
-```
-username: admin
-password: secret123
-```
-
 ## 2. Create a Python virtual environment
 
 From the project root:
@@ -41,7 +35,7 @@ python -m pip install -r requirements.txt
 The current dependencies are:
 
 - `pymongo` for MongoDB access
-- `requests` for HTTP requests
+- `uuid` for uuid generation
 
 ## Alternative: Nix Development Shell
 
