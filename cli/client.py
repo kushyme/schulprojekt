@@ -14,13 +14,11 @@ from flashcard_api import (
     update_flashcard,
     delete_flashcard,
     get_decks,
+    get_deck,
     get_deck_flashcards,
-    get_categories,
-    get_category,
-    get_category_flashcards,
-    create_category,
-    update_category,
-    delete_category,
+    create_deck,
+    update_deck,
+    delete_deck,
 )
 
 
@@ -175,94 +173,94 @@ def delete_flashcard_cli():
     print("Flashcard erfolgreich gelöscht.")
 
 
-def edit_category():
-    category_uuid = input("UUID der Category: ").strip()
-    if not is_valid_uuid(category_uuid):
+def create_deck_cli():
+    name = input("Name des neuen Decks: ").strip()
+    if not name:
+        print("Der Name darf nicht leer sein.")
+        return
+
+    result = create_deck(name)
+    if is_error_response(result):
+        print_error(result)
+        return
+
+    print("Deck erfolgreich erstellt.")
+    print(f"UUID: {result['uuid']}")
+
+
+def edit_deck():
+    deck_uuid = input("UUID des Decks: ").strip()
+    if not is_valid_uuid(deck_uuid):
         print("Ungültige UUID.")
         return
 
-    category = get_category(category_uuid)
-    if is_error_response(category):
-        print_error(category)
+    deck = get_deck(deck_uuid)
+    if is_error_response(deck):
+        print_error(deck)
         return
 
-    current_name = category.get("name", "")
+    current_name = deck.get("name", "")
     print(f"Aktueller Name: {current_name}")
     new_name = input("Neuer Name (leer lassen = unverändert): ").strip()
 
     updated_name = new_name if new_name else current_name
 
-    result = update_category(category_uuid, updated_name)
+    result = update_deck(deck_uuid, updated_name)
     if is_error_response(result):
         print_error(result)
         return
 
-    print("Category erfolgreich aktualisiert.")
+    print("Deck erfolgreich aktualisiert.")
 
 
-def create_category_cli():
-    name = input("Name der neuen Category: ").strip()
-    if not name:
-        print("Der Name darf nicht leer sein.")
-        return
-
-    result = create_category(name)
-    if is_error_response(result):
-        print_error(result)
-        return
-
-    print("Category erfolgreich erstellt.")
-    print(f"UUID: {result['uuid']}")
-
-
-def delete_category_cli():
-    category_uuid = input("UUID der Category: ").strip()
-    if not is_valid_uuid(category_uuid):
+def delete_deck_cli():
+    deck_uuid = input("UUID des Decks: ").strip()
+    if not is_valid_uuid(deck_uuid):
         print("Ungültige UUID.")
         return
 
-    result = delete_category(category_uuid)
+    result = delete_deck(deck_uuid)
     if is_error_response(result):
         print_error(result)
         return
 
-    print("Category erfolgreich gelöscht.")
+    print("Deck erfolgreich gelöscht.")
 
 
 def show_flashcards():
-    categories = get_categories()
+    decks = get_decks()
 
-    if is_error_response(categories):
-        print_error(categories)
+    if is_error_response(decks):
+        print_error(decks)
         return
 
-    if not categories:
-        print("Keine Categories verfügbar.")
+    if not decks:
+        print("Keine Decks verfügbar.")
         return
 
-    print("Verfügbare Categories:")
-    for index, category in enumerate(categories, start=1):
-        print(f" [{index}] {category.get('name', 'Unbenannt')} (UUID: {category.get('uuid')})")
+    print("Verfügbare Decks:")
+    for index, deck in enumerate(decks, start=1):
+        print(f" [{index}] {deck.get('name', 'Unbenannt')} (UUID: {deck.get('uuid')})")
 
-    choice = input("Category auswählen: ").strip()
-    if not choice.isdigit() or not (1 <= int(choice) <= len(categories)):
+    choice = input("Deck auswählen: ").strip()
+    if not choice.isdigit() or not (1 <= int(choice) <= len(decks)):
         print("Ungültige Auswahl.")
         return
 
-    selected_category = categories[int(choice) - 1]
-    category_uuid = selected_category["uuid"]
+    selected_deck = decks[int(choice) - 1]
+    deck_uuid = selected_deck["uuid"]
 
-    flashcards = get_category_flashcards(category_uuid)
+    flashcards = get_deck_flashcards(deck_uuid)
 
     if is_error_response(flashcards):
         print_error(flashcards)
         return
 
     if not flashcards:
-        print("Keine Flashcards in dieser Category gefunden.")
+        print("Keine Flashcards in diesem Deck gefunden.")
         return
 
-    print(f"Flashcards in Category: {selected_category.get('name', 'Unbenannt')}")
+    print(f"Flashcards in Deck: {selected_deck.get('name', 'Unbenannt')}")
     for card in flashcards:
         print("-" * 45)
         print(f"UUID: {card.get('uuid')}")
@@ -287,7 +285,6 @@ def show_decks():
         print("-" * 45)
         print(f"UUID: {deck.get('uuid')}")
         print(f"Name: {deck.get('name', 'Unbenannt')}")
-        print(f"Category UUID: {deck.get('category_id', '')}")
 
 
 def print_menu():
@@ -296,10 +293,10 @@ def print_menu():
     print(" [2] Flashcard bearbeiten")
     print(" [3] Flashcard erstellen")
     print(" [4] Flashcard löschen")
-    print(" [5] Kategorie erstellen")
-    print(" [6] Kategorie bearbeiten")
-    print(" [7] Kategorie löschen")
-    print(" [8] Alle Flashcards anzeigen")
+    print(" [5] Deck erstellen")
+    print(" [6] Deck bearbeiten")
+    print(" [7] Deck löschen")
+    print(" [8] Alle Flashcards eines Decks anzeigen")
     print(" [9] Alle Decks anzeigen")
     print(" [0] Beenden")
     print("=" * 45)
@@ -310,9 +307,9 @@ ACTIONS = {
     "2": edit_flashcard,
     "3": create_flashcard_cli,
     "4": delete_flashcard_cli,
-    "5": create_category_cli,
-    "6": edit_category,
-    "7": delete_category_cli,
+    "5": create_deck_cli,
+    "6": edit_deck,
+    "7": delete_deck_cli,
     "8": show_flashcards,
     "9": show_decks,
 }

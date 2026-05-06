@@ -34,7 +34,6 @@ def create_flashcard(deck_id, question, answer):
             "question": question,
             "answer": answer,
             "deck_id": deck_id,
-            "category_id": deck.get("category_id"),
         }
 
         db.flashcards.insert_one(flashcard)

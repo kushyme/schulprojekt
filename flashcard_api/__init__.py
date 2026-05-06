@@ -6,15 +6,11 @@ from .flashcards import (
 )
 from .decks import (
     get_decks,
+    get_deck,
     get_deck_flashcards,
-)
-from .categories import (
-    get_categories,
-    get_category,
-    get_category_flashcards,
-    create_category,
-    update_category,
-    delete_category,
+    create_deck,
+    update_deck,
+    delete_deck,
 )
 
 __all__ = [
@@ -23,11 +19,9 @@ __all__ = [
     "update_flashcard",
     "delete_flashcard",
     "get_decks",
+    "get_deck",
     "get_deck_flashcards",
-    "get_categories",
-    "get_category",
-    "get_category_flashcards",
-    "create_category",
-    "update_category",
-    "delete_category",
+    "create_deck",
+    "update_deck",
+    "delete_deck",
 ]
