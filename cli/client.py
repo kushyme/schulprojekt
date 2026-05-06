@@ -1,7 +1,27 @@
-import requests
+import os
+import sys
 from uuid import UUID
 
-BASE_URL = "http://localhost:1337"
+CURRENT_DIR = os.path.dirname(__file__)
+PROJECT_ROOT = os.path.abspath(os.path.join(CURRENT_DIR, ".."))
+
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+
+from flashcard_api import (
+    get_flashcard,
+    create_flashcard,
+    update_flashcard,
+    delete_flashcard,
+    get_decks,
+    get_deck_flashcards,
+    get_categories,
+    get_category,
+    get_category_flashcards,
+    create_category,
+    update_category,
+    delete_category,
+)
 
 
 def is_valid_uuid(value):
@@ -12,32 +32,22 @@ def is_valid_uuid(value):
         return False
 
 
-def handle_request_error(response):
-    if response.status_code == 404:
-        print("Ressource nicht gefunden.")
-    elif response.status_code >= 500:
-        print("Serverfehler bei der API.")
+def is_error_response(result):
+    return isinstance(result, dict) and "error" in result and "status" in result
+
+
+def print_error(result):
+    if is_error_response(result):
+        print(f"Fehler: {result['error']} (HTTP {result['status']})")
     else:
-        print(f"API-Fehler: HTTP {response.status_code}")
-
-
-def get_json(url):
-    try:
-        response = requests.get(url)
-    except requests.RequestException:
-        print("Verbindung zur API fehlgeschlagen.")
-        return None
-
-    if response.ok:
-        return response.json()
-
-    handle_request_error(response)
-    return None
+        print("Ein unbekannter Fehler ist aufgetreten.")
 
 
 def study():
-    decks = get_json(f"{BASE_URL}/decks")
-    if decks is None:
+    decks = get_decks()
+
+    if is_error_response(decks):
+        print_error(decks)
         return
 
     if not decks:
@@ -46,18 +56,20 @@ def study():
 
     print("Verfügbare Decks:")
     for index, deck in enumerate(decks, start=1):
-        print(f" [{index}] {deck.get('name', 'Unbenannt')} (ID: {deck.get('id')})")
+        print(f" [{index}] {deck.get('name', 'Unbenannt')} (UUID: {deck.get('uuid')})")
 
-    choice = input("Deck auswählen: ")
+    choice = input("Deck auswählen: ").strip()
     if not choice.isdigit() or not (1 <= int(choice) <= len(decks)):
         print("Ungültige Auswahl.")
         return
 
     selected_deck = decks[int(choice) - 1]
-    deck_id = selected_deck.get("id")
+    deck_uuid = selected_deck["uuid"]
 
-    flashcards = get_json(f"{BASE_URL}/decks/{deck_id}/flashcards")
-    if flashcards is None:
+    flashcards = get_deck_flashcards(deck_uuid)
+
+    if is_error_response(flashcards):
+        print_error(flashcards)
         return
 
     if not flashcards:
@@ -83,8 +95,9 @@ def edit_flashcard():
         print("Ungültige UUID.")
         return
 
-    flashcard = get_json(f"{BASE_URL}/flashcards/{flashcard_uuid}")
-    if flashcard is None:
+    flashcard = get_flashcard(flashcard_uuid)
+    if is_error_response(flashcard):
+        print_error(flashcard)
         return
 
     current_question = flashcard.get("question", "")
@@ -96,26 +109,22 @@ def edit_flashcard():
     print(f"Aktuelle Antwort: {current_answer}")
     new_answer = input("Neue Antwort (leer lassen = unverändert): ").strip()
 
-    payload = {
-        "question": new_question if new_question else current_question,
-        "answer": new_answer if new_answer else current_answer,
-    }
+    updated_question = new_question if new_question else current_question
+    updated_answer = new_answer if new_answer else current_answer
 
-    try:
-        response = requests.put(f"{BASE_URL}/flashcards/{flashcard_uuid}", json=payload)
-    except requests.RequestException:
-        print("Verbindung zur API fehlgeschlagen.")
+    result = update_flashcard(flashcard_uuid, updated_question, updated_answer)
+    if is_error_response(result):
+        print_error(result)
         return
 
-    if response.ok:
-        print("Flashcard erfolgreich aktualisiert.")
-    else:
-        handle_request_error(response)
+    print("Flashcard erfolgreich aktualisiert.")
 
 
-def create_flashcard():
-    decks = get_json(f"{BASE_URL}/decks")
-    if decks is None:
+def create_flashcard_cli():
+    decks = get_decks()
+
+    if is_error_response(decks):
+        print_error(decks)
         return
 
     if not decks:
@@ -124,9 +133,9 @@ def create_flashcard():
 
     print("Verfügbare Decks:")
     for index, deck in enumerate(decks, start=1):
-        print(f" [{index}] {deck.get('name', 'Unbenannt')} (ID: {deck.get('id')})")
+        print(f" [{index}] {deck.get('name', 'Unbenannt')} (UUID: {deck.get('uuid')})")
 
-    choice = input("Deck auswählen: ")
+    choice = input("Deck auswählen: ").strip()
     if not choice.isdigit() or not (1 <= int(choice) <= len(decks)):
         print("Ungültige Auswahl.")
         return
@@ -139,40 +148,31 @@ def create_flashcard():
         print("Frage und Antwort dürfen nicht leer sein.")
         return
 
-    payload = {
-        "deck_id": selected_deck.get("id"),
-        "question": question,
-        "answer": answer,
-    }
-
-    try:
-        response = requests.post(f"{BASE_URL}/flashcards", json=payload)
-    except requests.RequestException:
-        print("Verbindung zur API fehlgeschlagen.")
+    result = create_flashcard(
+        deck_id=selected_deck["uuid"],
+        question=question,
+        answer=answer,
+    )
+    if is_error_response(result):
+        print_error(result)
         return
 
-    if response.ok:
-        print("Flashcard erfolgreich erstellt.")
-    else:
-        handle_request_error(response)
+    print("Flashcard erfolgreich erstellt.")
+    print(f"UUID: {result['uuid']}")
 
 
-def delete_flashcard():
+def delete_flashcard_cli():
     flashcard_uuid = input("UUID der Flashcard: ").strip()
     if not is_valid_uuid(flashcard_uuid):
         print("Ungültige UUID.")
         return
 
-    try:
-        response = requests.delete(f"{BASE_URL}/flashcards/{flashcard_uuid}")
-    except requests.RequestException:
-        print("Verbindung zur API fehlgeschlagen.")
+    result = delete_flashcard(flashcard_uuid)
+    if is_error_response(result):
+        print_error(result)
         return
 
-    if response.ok:
-        print("Flashcard erfolgreich gelöscht.")
-    else:
-        handle_request_error(response)
+    print("Flashcard erfolgreich gelöscht.")
 
 
 def edit_category():
@@ -181,71 +181,59 @@ def edit_category():
         print("Ungültige UUID.")
         return
 
-    category = get_json(f"{BASE_URL}/categories/{category_uuid}")
-    if category is None:
+    category = get_category(category_uuid)
+    if is_error_response(category):
+        print_error(category)
         return
 
     current_name = category.get("name", "")
     print(f"Aktueller Name: {current_name}")
     new_name = input("Neuer Name (leer lassen = unverändert): ").strip()
 
-    payload = {
-        "name": new_name if new_name else current_name
-    }
+    updated_name = new_name if new_name else current_name
 
-    try:
-        response = requests.put(f"{BASE_URL}/categories/{category_uuid}", json=payload)
-    except requests.RequestException:
-        print("Verbindung zur API fehlgeschlagen.")
+    result = update_category(category_uuid, updated_name)
+    if is_error_response(result):
+        print_error(result)
         return
 
-    if response.ok:
-        print("Category erfolgreich aktualisiert.")
-    else:
-        handle_request_error(response)
+    print("Category erfolgreich aktualisiert.")
 
 
-def create_category():
+def create_category_cli():
     name = input("Name der neuen Category: ").strip()
     if not name:
         print("Der Name darf nicht leer sein.")
         return
 
-    payload = {"name": name}
-
-    try:
-        response = requests.post(f"{BASE_URL}/categories", json=payload)
-    except requests.RequestException:
-        print("Verbindung zur API fehlgeschlagen.")
+    result = create_category(name)
+    if is_error_response(result):
+        print_error(result)
         return
 
-    if response.ok:
-        print("Category erfolgreich erstellt.")
-    else:
-        handle_request_error(response)
+    print("Category erfolgreich erstellt.")
+    print(f"UUID: {result['uuid']}")
 
 
-def delete_category():
+def delete_category_cli():
     category_uuid = input("UUID der Category: ").strip()
     if not is_valid_uuid(category_uuid):
         print("Ungültige UUID.")
         return
 
-    try:
-        response = requests.delete(f"{BASE_URL}/categories/{category_uuid}")
-    except requests.RequestException:
-        print("Verbindung zur API fehlgeschlagen.")
+    result = delete_category(category_uuid)
+    if is_error_response(result):
+        print_error(result)
         return
 
-    if response.ok:
-        print("Category erfolgreich gelöscht.")
-    else:
-        handle_request_error(response)
+    print("Category erfolgreich gelöscht.")
 
 
 def show_flashcards():
-    categories = get_json(f"{BASE_URL}/categories")
-    if categories is None:
+    categories = get_categories()
+
+    if is_error_response(categories):
+        print_error(categories)
         return
 
     if not categories:
@@ -256,16 +244,18 @@ def show_flashcards():
     for index, category in enumerate(categories, start=1):
         print(f" [{index}] {category.get('name', 'Unbenannt')} (UUID: {category.get('uuid')})")
 
-    choice = input("Category auswählen: ")
+    choice = input("Category auswählen: ").strip()
     if not choice.isdigit() or not (1 <= int(choice) <= len(categories)):
         print("Ungültige Auswahl.")
         return
 
     selected_category = categories[int(choice) - 1]
-    category_uuid = selected_category.get("uuid")
+    category_uuid = selected_category["uuid"]
 
-    flashcards = get_json(f"{BASE_URL}/categories/{category_uuid}/flashcards")
-    if flashcards is None:
+    flashcards = get_category_flashcards(category_uuid)
+
+    if is_error_response(flashcards):
+        print_error(flashcards)
         return
 
     if not flashcards:
@@ -278,22 +268,26 @@ def show_flashcards():
         print(f"UUID: {card.get('uuid')}")
         print(f"Frage: {card.get('question', '')}")
         print(f"Antwort: {card.get('answer', '')}")
+        print(f"Deck UUID: {card.get('deck_id', '')}")
 
 
 def show_decks():
-    categories = get_json(f"{BASE_URL}/categories")
-    if categories is None:
+    decks = get_decks()
+
+    if is_error_response(decks):
+        print_error(decks)
         return
 
-    if not categories:
-        print("Keine Categories verfügbar.")
+    if not decks:
+        print("Keine Decks verfügbar.")
         return
 
-    print("Alle Categories:")
-    for category in categories:
+    print("Alle Decks:")
+    for deck in decks:
         print("-" * 45)
-        print(f"UUID: {category.get('uuid')}")
-        print(f"Name: {category.get('name', 'Unbenannt')}")
+        print(f"UUID: {deck.get('uuid')}")
+        print(f"Name: {deck.get('name', 'Unbenannt')}")
+        print(f"Category UUID: {deck.get('category_id', '')}")
 
 
 def print_menu():
@@ -314,11 +308,11 @@ def print_menu():
 ACTIONS = {
     "1": study,
     "2": edit_flashcard,
-    "3": create_flashcard,
-    "4": delete_flashcard,
-    "5": edit_category,
-    "6": create_category,
-    "7": delete_category,
+    "3": create_flashcard_cli,
+    "4": delete_flashcard_cli,
+    "5": create_category_cli,
+    "6": edit_category,
+    "7": delete_category_cli,
     "8": show_flashcards,
     "9": show_decks,
 }
@@ -327,7 +321,7 @@ ACTIONS = {
 def main():
     while True:
         print_menu()
-        choice = input("    Auswahl: ")
+        choice = input("    Auswahl: ").strip()
 
         if choice == "0":
             print("Auf Wiedersehen!")

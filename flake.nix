@@ -26,7 +26,6 @@
             with python-pkgs; [
               requests
               pymongo
-              uuid
             ]))
         ];
 

@@ -4,7 +4,7 @@ services:
     container_name: mongodb
     restart: unless-stopped
     environment:
-      MONGO_INITDB_DATABASE: mydb
+      MONGO_INITDB_DATABASE: flashcard_app
     ports:
       - "27017:27017"
     volumes:
