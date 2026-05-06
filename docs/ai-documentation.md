@@ -3,7 +3,7 @@
 - Nix pkgs unfree license (mongodb, monge-ce)
 - gelöst durch docker-compose.yml
 - DB-Verbindung getestet -> funktioniert
-
+- lokales testen mit mongosh (mongodb kennenlernen, abfragen testen etc.)  (https://gist.github.com/bradtraversy/f407d642bdc3b31681bc7e56d95485b6)
 
 
 #### KI-Nutzung:
@@ -13,8 +13,10 @@
 ## Datum: 05.05.2026
 - cli-interface bearbeitet -> Menü für den Nutzer erstellt
 - Menüoptionen getestet -> funktioniert
-- Funktionen aktuell noch mit Placeholdern gefüllt
-- mit dem Grundgerüst eine Datenstruktur überlegt
+- Funktionen aktuell noch mit Placeholdern gefüllt: https://github.com/kushyme/flashcard-cli/commit/b9ac548b2354cfcf17b98641400a2ab9ad1c6f48
+- mit dem Grundgerüst eine Datenstruktur überlegt -> Vorder-,Rückseite,Deck
+- API funktioniert noch nicht 
+
 
 
 #### KI-Nutzung:
@@ -39,3 +41,14 @@ Nutze ausschließlich CLI-Eingaben (input()) und Ausgaben (print()).
 Validiere UUIDs und gib sinnvolle Fehlermeldungen aus, wenn eine UUID nicht gefunden wird oder die API einen Fehler zurückgibt (z. B. HTTP 404, 500).
 Behandle Verbindungsfehler zur API sauber mit einer verständlichen Fehlermeldung.
 Halte den Code sauber, lesbar und konsistent mit dem bestehenden Stil.
+
+
+## Datum: 06.05.2026
+
+- API gefixt -> mithilfe von GitHub Co-Pilot
+- docker-compose angepasst 
+- Anpassungen nötig nachdem wir einen client hatten welcher auf eine http rest api ausgelegt war, wir uns aber unstimmig waren und uns dann für eine lokale mit python exports entschieden haben
+
+
+#### KI-Nutzung
+- GitHub Copilot das gesamte Repo als kontext gegeben, er konnte sich alle files angucken und hat daraus eine passende API generiert
